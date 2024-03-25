@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
 
-
     'store.apps.StoreConfig',
 ]
 
@@ -124,8 +123,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media/'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
