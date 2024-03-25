@@ -1,0 +1,16 @@
+{% extends 'auth/auth_base.html' %}
+{% load static %}
+
+{% block title %} Login {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block authtitle %}
+<h2 class="text-center">LOGIN</h2>
+{% endblock %}
+
+{% block form %}
+{{form|crispy}}
+{% endblock %}
+{% block btntext %}
+Login
+{% endblock %}

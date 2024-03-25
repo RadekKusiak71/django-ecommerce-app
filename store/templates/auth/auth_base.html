@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 70vh;">
+    <div class="m-auto mw-25 d-flex justify-content-center align-items-center flex-column bg-light p-5 border"
+        style="border-radius: 20px;">
+        {% block authtitle %}
+        {% endblock %}
+        <form action="" method="post">
+            {% csrf_token %}
+            {% block form %}
+            {% endblock %}
+
+            <button type="submit" class="btn btn-outline-dark w-100 mt-4">
+                {% block btntext %}
+                {% endblock %}
+            </button>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'auth/auth_base.html' %}
+{% load static %}
+
+{% block title %} Register {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block authtitle %}
+<h2 class="m-auto text-center">SIGN UP</h2>
+{% endblock %}
+
+{% block form %}
+{{form|crispy}}
+{% endblock %}
+
+{% block btntext %}
+Sign up
+{% endblock %}

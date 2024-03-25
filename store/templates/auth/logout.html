@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Logout {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center flex-column ">
+    <div class="alert alert-success" role="alert">
+        You have been logged out succesfully!
+    </div>
+    <a class="btn btn-lg btn-outline-dark" href="{% url 'home-page' %}">Go back to main page.</a>
+</div>
+{% endblock %}
