@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Product {% endblock %}
+{% block content %}
+<div class="container bg-light border d-flex justify-content-around p-3 w-100"
+    style="border-radius:20px;height: fit-content;">
+    <img src="{{product.image.url}}" alt="" style="height: 500px;">
+    <div class="container h-100 w-75 p-4">
+        <h2>{{product.title}}</h2>
+        <p class="fs-4">{{product.title}} -{% if product.promotion %}
+            {{product.get_price_after_promotion}}${% else %}{{product.price}}${% endif %}</p>
+        <p>{{product.description}}</p>
+        <div class="d-flex justify-content-start align-items-center gap-2 w-100 flex-column">
+            {% for size, count in sizes.items %}
+            {% if count is 0 %}
+            <input type="radio" class="btn-check" name="size" id="{{size}}" autocomplete="off" disabled>
+            <label class="btn btn-outline-dark w-100 " for="{{size}}">{{size|upper}}
+                -
+                {{count}}</label>
+            {% else %}
+            <input type="radio" class="btn-check" name="size" id="{{size}}" autocomplete="off">
+            <label class="btn btn-outline-dark w-100 " for="{{size}}">{{size|upper}}
+                -
+                {{count}}</label>
+            {% endif %}
+            {% endfor %}
+            <form action="" class="w-100" onsubmit="return validateForm()">
+                <button class="btn btn-primary w-100" type="submit"> Add to cart</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="{% static 'javascript/checkRadioSelect.js' %}"></script>
+{% endblock %}
