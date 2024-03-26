@@ -24,5 +24,4 @@ class LoginView(LoginView):
 
 class LogoutView(LogoutView):
     template_name = 'auth/logout.html'
-    redirect_field_name = reverse_lazy("login-page")
     next = reverse_lazy("login-page")
