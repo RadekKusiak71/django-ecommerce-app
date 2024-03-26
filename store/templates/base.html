@@ -23,12 +23,11 @@
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto justify-content-center px-5">
                     <li><a href="{% url 'home-page' %}" class="nav-link px-2 link-dark">Home</a></li>
-                    <li><a href="#" class="nav-link px-2 link-dark">Products</a></li>
                 </ul>
 
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input type="search" class="form-control" placeholder="Search for product..." aria-label="Search">
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" method="GET" action="{% url 'home-page' %}">
+                    <input type="search" name="product_name" class="form-control" placeholder="Search for product..." aria-label="Search">
                 </form>
                 <div class="dropdown text-end">
                     {% if user.is_authenticated %}

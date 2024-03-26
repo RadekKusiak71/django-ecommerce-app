@@ -25,7 +25,11 @@ class HomePageView(generic.ListView):
     def filter_queryset(self, queryset: QuerySet[Product]) -> List[Product]:
         filter_queries = self.request.GET.dict()
 
-        if filter_queries.get('category') != None:
+        if filter_queries.get('product_name'):
+            queryset = queryset.filter(
+                title__contains=filter_queries.get('product_name'))
+
+        if filter_queries.get('category'):
             if len(filter_queries.get('category')) < 10:
                 queryset = queryset.filter(
                     category=filter_queries.get('category'))
