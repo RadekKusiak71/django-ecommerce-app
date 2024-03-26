@@ -45,12 +45,12 @@ class HomePageView(generic.ListView):
         return queryset
 
     def filter_price(self, queryset: QuerySet[Product], filter_queries: Dict[str, str]) -> QuerySet[Product]:
-        if filter_queries.get('min-price'):
+        if filter_queries.get('minprice'):
             queryset = queryset.filter(
-                price__gte=Decimal(filter_queries.get('min-price').replace(',', '.')))
-        if filter_queries.get('max-price'):
+                price__gte=Decimal(filter_queries.get('minprice').replace(',', '.')))
+        if filter_queries.get('maxprice'):
             queryset = queryset.filter(
-                price__lte=Decimal(filter_queries.get('max-price').replace(',', '.')))
+                price__lte=Decimal(filter_queries.get('maxprice').replace(',', '.')))
         return queryset
 
     def filter_sizes(self, queryset: QuerySet[Product], filter_queries: Dict[str, str]) -> List[Product]:

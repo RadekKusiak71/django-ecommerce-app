@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load query_transform %}
 
 {% block title %} Home {% endblock %}
 
@@ -15,22 +16,25 @@
                     {% for category in categories %}
                     <option value="{{category.id}}">{{category.title}}</option>
                     {% endfor %}
-                  </select>
+                </select>
             </div>
             <div class="form-group mt-4 d-flex justify-content-center align-items-center gap-3 flex-column">
                 {% for size in sizes %}
-                <input type="radio" class="btn-check w-100" name="size" value="{{size}}" id="{{size}}" autocomplete="off">
+                <input type="radio" class="btn-check w-100" name="size" value="{{size}}" id="{{size}}"
+                    autocomplete="off">
                 <label class="btn btn-outline-dark w-100" for="{{size}}">{{size}}</label>
                 {% endfor %}
             </div>
             <div class="form-group mt-3 d-flex justify-content-center align-items-center flex-column gap-2">
                 <div class="">
-                    <label for="min-price">Minimum price: </label>
-                    <input class="form-control" type="number" name="min-price" id="min-price" placeholder="Min price" step="0.01">
+                    <label for="minprice">Minimum price: </label>
+                    <input class="form-control" type="number" name="minprice" id="minprice" placeholder="Min price"
+                        step="0.01">
                 </div>
                 <div class="">
-                    <label for="max-price">Maximum price: </label>
-                    <input class="form-control" type="number" name="max-price" id="max-price" placeholder="Max price" step="0.01">
+                    <label for="maxprice">Maximum price: </label>
+                    <input class="form-control" type="number" name="maxprice" id="maxprice" placeholder="Max price"
+                        step="0.01">
                 </div>
                 <input type="checkbox" class="btn-check w-100" name="promotion" id="promotion" autocomplete="off">
                 <label class="btn btn-outline-success w-100" for="promotion">Promotion</label>
@@ -46,7 +50,8 @@
             <div class="card" style="width: 18rem">
                 <img src="{{product.image.url}}" style="height: 20rem;" alt="">
                 <div class="card-body">
-                    <h5 class="card-title">{{product.title}} -{% if product.promotion %} {{product.get_price_after_promotion}}${% else %}{{product.price}}${% endif %}</h5>
+                    <h5 class="card-title">{{product.title}} -{% if product.promotion %}
+                        {{product.get_price_after_promotion}}${% else %}{{product.price}}${% endif %}</h5>
                     <p class="card-text fs-6">{{product.description}}</p>
                     <a href="#" class="btn btn-primary w-100">Checkout</a>
                 </div>
@@ -54,8 +59,9 @@
             {% endfor %}
             {% else %}
             <div class="alert alert-danger" role="alert">
-                No product found <a href="{% url 'home-page' %}" class="alert-link">clear filters</a>. Give it a click if you want to click filters.
-              </div>
+                No product found <a href="{% url 'home-page' %}" class="alert-link">clear filters</a>. Give it a click
+                if you want to click filters.
+            </div>
             {% endif %}
         </div>
 
@@ -72,7 +78,8 @@
 
                 {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">Next</a>
+                    <a class="page-link"
+                        href="?{% query_transform page=page_obj.next_page_number category=request.GET.category size=request.GET.size minprice=request.GET.minprice maxprice=request.GET.maxprice promotion=request.GET.promotion %}">Next</a>
                 </li>
                 {% endif %}
             </ul>
