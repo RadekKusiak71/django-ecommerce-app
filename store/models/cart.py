@@ -10,6 +10,9 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def exists(self, product: Product, size: str) -> bool:
+        """
+            Method checking if item in cart is already exist
+        """
         return CartItem.objects.filter(cart=self, product=product, size=size.upper()).exists()
 
     def get_total_price(self) -> Decimal:

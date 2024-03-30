@@ -2,33 +2,63 @@
 {% load static %}
 {% block title %} Product {% endblock %}
 {% block content %}
-<div class="container bg-light border d-flex justify-content-around p-3 w-100"
-    style="border-radius:20px;height: fit-content;">
-    <img src="{{product.image.url}}" alt="" style="height: 500px;">
-    <div class="container h-100 w-75 p-4">
-        <h2>{{product.title}}</h2>
-        <p class="fs-4">{{product.title}} -{% if product.promotion %}
-            {{product.get_price_after_promotion}}${% else %}{{product.price}}${% endif %}</p>
-        <p>{{product.description}}</p>
-        <div class="d-flex justify-content-start align-items-center gap-2 w-100 flex-column">
-            {% for size, count in sizes.items %}
-            {% if count is 0 %}
-            <input type="radio" class="btn-check" name="size" id="{{size}}" autocomplete="off" disabled>
-            <label class="btn btn-outline-dark w-100 " for="{{size}}">{{size|upper}}
-                -
-                {{count}}</label>
-            {% else %}
-            <input type="radio" class="btn-check" name="size" id="{{size}}" autocomplete="off">
-            <label class="btn btn-outline-dark w-100 " for="{{size}}">{{size|upper}}
-                -
-                {{count}}</label>
-            {% endif %}
-            {% endfor %}
-            <form action="" class="w-100" onsubmit="return validateForm()">
-                <button class="btn btn-primary w-100" type="submit"> Add to cart</button>
+<div class="container p-5">
+
+    <div class="bg-light border d-flex justify-content-around p-3 w-100"
+        style="border-radius:20px;height: fit-content;">
+        <img src="{{product.image.url}}" alt="" style="height: 500px;">
+        <div class="container h-100 w-75 p-4">
+            <h2>{{product.title}}</h2>
+            <p class="fs-4">{{product.title}} -{% if product.promotion %}
+                {{product.get_price_after_promotion}}${% else %}{{product.price}}${% endif %}</p>
+            <p>{{product.description}}</p>
+            <form class="w-100" method="post" onsubmit="return validateForm()">
+                <div class="d-flex justify-content-start align-items-center gap-2 w-100 flex-column">
+                    {% for size, count in sizes.items %}
+                    {% if count is 0 %}
+                    <input type="radio" class="btn-check" name="size" id="{{size}}" value="{{size}}" autocomplete="off"
+                        disabled>
+                    <label class="btn btn-outline-dark w-100 " for="{{size}}">{{size|upper}}
+                        -
+                        {{count}}</label>
+                    {% else %}
+                    <input type="radio" class="btn-check" name="size" id="{{size}}" value="{{size}}" autocomplete="off">
+                    <label class="btn btn-outline-dark w-100 " for="{{size}}">{{size|upper}}
+                        -
+                        {{count}}</label>
+                    {% endif %}
+                    {% endfor %}
+                    {% csrf_token %}
+                    <button class="btn btn-primary w-100" type="submit"> Add to cart</button>
             </form>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-warning w-100" role="alert">
+                {{message}}
+            </div>
+            {% endfor %}
+            {% endif %}
         </div>
     </div>
+</div>
+<div class="card mt-2">
+    <div class="card-header">
+        Similar products
+    </div>
+    <div class="card-body d-flex justify-content-around">
+        {% for product in slider_items %}
+        <div class="card" style="width: 23rem">
+            <img src="{{product.image.url}}" style="height: 20rem;" alt="">
+            <div class="card-body">
+                <h5 class="card-title">{{product.title}} -{% if product.promotion %}
+                    {{product.get_price_after_promotion}}${% else %}{{product.price}}${% endif %}</h5>
+                <p class="card-text fs-6">{{product.description}}</p>
+                <a href="{% url 'product-page' pk=product.id %}" class="btn btn-primary w-100">Checkout</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 </div>
 <script src="{% static 'javascript/checkRadioSelect.js' %}"></script>
 {% endblock %}

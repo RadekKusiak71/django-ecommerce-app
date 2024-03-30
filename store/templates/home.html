@@ -53,7 +53,7 @@
                     <h5 class="card-title">{{product.title}} -{% if product.promotion %}
                         {{product.get_price_after_promotion}}${% else %}{{product.price}}${% endif %}</h5>
                     <p class="card-text fs-6">{{product.description}}</p>
-                    <a href="#" class="btn btn-primary w-100">Checkout</a>
+                    <a href="{% url 'product-page' pk=product.id %}" class="btn btn-primary w-100">Checkout</a>
                 </div>
             </div>
             {% endfor %}
