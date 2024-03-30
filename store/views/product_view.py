@@ -13,11 +13,14 @@ class ProductView(generic.DetailView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['sizes'] = self.get_product_sizes()
+        context['slider-items'] = self.get_slider_items()
         return context
 
     def get_slider_items(self):
         products = Product.objects.filter(
             category=self.get_object().category)[:3]
+        if not products:
+            products = Product.objects.all()[:3]
         return products
 
     def get_product_sizes(self):
