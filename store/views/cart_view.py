@@ -21,7 +21,9 @@ class CartView(generic.ListView):
         )[0]
 
     def get_queryset(self) -> Cart:
-        return CartItem.objects.filter(cart=self.get_object())
+        print(self.get_object())
+        queryset = CartItem.objects.filter(cart=self.get_object())
+        return queryset
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)

@@ -43,8 +43,10 @@ class ProductView(generic.DetailView, RedirectView):
             cart, created_cart = AuthenticatedCart.objects.get_or_create(
                 customer=request.user)
         else:
+            if not request.session.exists(request.session.session_key):
+                request.session.create()
             cart, created_cart = AnonymousCart.objects.get_or_create(
-                session_key=request.session._get_or_create_session_key()
+                session_key=request.session.session_key
             )
 
         if cart.exists(product, size):
