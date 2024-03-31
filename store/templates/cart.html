@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load multiply_tag %}
+
+{% block title %} Cart {% endblock %}
+
+{% block content %}
+
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-warning" role="alert">
+    {{message}}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if object_list %}
+
+<table class="table mt-2">
+    <thead>
+        <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Name</th>
+            <th scope="col">Size</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total price</th>
+        </tr>
+
+    <tbody>
+        {% for item in object_list %}
+        <tr>
+            <th scope="row">
+                <img src="{{item.product.image.url}}" style="width: 3rem;" alt="">
+            </th>
+            <td>
+                {{item.product.title}}
+            </td>
+            <td>
+                {{item.size}}
+            </td>
+            <td>
+                <form action="{% url 'cart-item-add' pk=item.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" href="" class="btn btn-success"></button>
+                </form>
+                {{item.quantity}}
+                <form action="{% url 'cart-item-delete' pk=item.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" href="" class="btn btn-danger"></button>
+                </form>
+            </td>
+            <td>
+                {% if item.product.promotion %}
+                {{item.product.get_price_after_promotion| multiply:item.quantity}} $
+                {% else %}
+                {{item.product.price | multiply:item.quantity}} $
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </thead>
+</table>
+<div class="d-flex justify-content-between align-items-center">
+    <h2>Total price: {{total_cart_price}}$</h2>
+    <a href="#" class="btn btn-primary">Procced to checkout</a>
+</div>
+{% else %}
+<div class="alert alert-info" role="alert">
+    Your cart is empty. <a href="{% url 'home-page' %}" class="alert-link">Products.</a>
+</div>
+{% endif %}
+
+{% endblock %}

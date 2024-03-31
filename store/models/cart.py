@@ -17,7 +17,7 @@ class Cart(models.Model):
 
     def get_total_price(self) -> Decimal:
         cart_items = list(CartItem.objects.filter(cart=self))
-        total_price = sum([(item.quantity * item.product.price)
+        total_price = sum([(item.product.get_price_after_promotion() * item.quantity)
                           for item in cart_items])
         return total_price
 
