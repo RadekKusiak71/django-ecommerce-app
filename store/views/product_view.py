@@ -5,7 +5,6 @@ from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from store.models import Product, Cart, CartItem, AnonymousCart, AuthenticatedCart
 from django.views import generic
-from django.urls import reverse_lazy
 from django.views.generic.base import RedirectView
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -38,9 +37,9 @@ class ProductView(generic.DetailView, RedirectView):
 
         if product.sizes.get_size_quantity(size) == 0:
             messages.error(request, "Size is unavailable...")
-            return redirect("product-page", product.id)
+            return redirect("product-page", pk=product.id)
 
-        if (request.user.is_authenticated):
+        if request.user.is_authenticated:
             cart, created_cart = AuthenticatedCart.objects.get_or_create(
                 customer=request.user)
         else:
@@ -54,7 +53,7 @@ class ProductView(generic.DetailView, RedirectView):
             cart_item.quantity += 1
             cart_item.save()
         else:
-            CartItem.objects.create(
+            cart_item = CartItem.objects.create(
                 cart=cart, product=product, size=size.upper(), quantity=1)
 
-        return super().post(request, *args, **kwargs)
+        return redirect("cart-page")
