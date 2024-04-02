@@ -13,7 +13,7 @@ class CartView(generic.ListView):
     template_name = 'cart.html'
     model = Cart
 
-    def get_object(self, queryset: QuerySet[Any] | None = ...) -> Cart:
+    def get_object(self) -> Cart:
         if self.request.user.is_authenticated:
             return AuthenticatedCart.objects.get_or_create(customer=self.request.user)[0]
         return AnonymousCart.objects.get_or_create(
@@ -21,8 +21,8 @@ class CartView(generic.ListView):
         )[0]
 
     def get_queryset(self) -> Cart:
-        print(self.get_object())
-        queryset = CartItem.objects.filter(cart=self.get_object())
+        queryset = [
+            item for item in CartItem.objects.filter(cart=self.get_object()) if item.adjust_quantity()]
         return queryset
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -33,17 +33,16 @@ class CartView(generic.ListView):
 
 class CartItemDelete(generic.DeleteView):
     model = CartItem
-    success_url = reverse_lazy('cart-page')
 
     def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         cart_item: CartItem = self.get_object()
         if cart_item.quantity <= 1:
             cart_item.delete()
-            messages.info(
-                request, f"{cart_item.product.title} deleted successfully")
         else:
             cart_item.quantity -= 1
             cart_item.save()
+        messages.info(
+            request, f"{cart_item.product.title} deleted successfully")
         return redirect('cart-page')
 
 
@@ -56,9 +55,11 @@ class CartItemAdd(generic.UpdateView):
         product_with_correct_size_quantity = cart_item.product.sizes.get_size_quantity(
             cart_item.size)
 
-        if (cart_item.quantity + 1 <= product_with_correct_size_quantity):
+        if cart_item.quantity + 1 <= product_with_correct_size_quantity:
             cart_item.quantity += 1
             cart_item.save()
+            messages.info(
+                request, f"{cart_item.product.title} added successfully")
         else:
             messages.info(request, f"Maximum product quantity is {
                           product_with_correct_size_quantity}.")

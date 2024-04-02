@@ -18,8 +18,8 @@ class HomePageView(generic.ListView):
         return context
 
     def get_queryset(self) -> QuerySet[Product]:
-        queryset = super().get_queryset()
-        queryset = self.filter_queryset(queryset)
+        queryset: QuerySet[Product] = self.filter_queryset(
+            super().get_queryset())
         return queryset
 
     def filter_queryset(self, queryset: QuerySet[Product]) -> List[Product]:
@@ -48,14 +48,14 @@ class HomePageView(generic.ListView):
         if filter_queries.get('minprice'):
             queryset = queryset.filter(
                 price__gte=Decimal(filter_queries.get('minprice').replace(',', '.')))
+
         if filter_queries.get('maxprice'):
             queryset = queryset.filter(
                 price__lte=Decimal(filter_queries.get('maxprice').replace(',', '.')))
+
         return queryset
 
     def filter_sizes(self, queryset: QuerySet[Product], filter_queries: Dict[str, str]) -> List[Product]:
-        products = []
-        for product in queryset:
-            if product.sizes.get_size_quantity(filter_queries.get('size')) > 0:
-                products.append(product)
+        products = [product for product in queryset if product.sizes.get_size_quantity(
+            filter_queries.get('size')) > 0]
         return products

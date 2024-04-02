@@ -50,12 +50,12 @@ class ProductView(generic.DetailView, RedirectView):
             )
 
         if cart.exists(product, size):
-            cart_item = CartItem.objects.filter(
-                cart=cart, product=product).first()
+            cart_item = CartItem.objects.get(
+                cart=cart, product=product, size=size.upper())
             cart_item.quantity += 1
             cart_item.save()
         else:
-            cart_item = CartItem.objects.create(
+            CartItem.objects.create(
                 cart=cart, product=product, size=size.upper(), quantity=1)
 
         return redirect("cart-page")

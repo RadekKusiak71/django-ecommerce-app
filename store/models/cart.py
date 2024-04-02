@@ -16,9 +16,10 @@ class Cart(models.Model):
         return CartItem.objects.filter(cart=self, product=product, size=size.upper()).exists()
 
     def get_total_price(self) -> Decimal:
-        cart_items = list(CartItem.objects.filter(cart=self))
-        total_price = sum([(item.product.get_price_after_promotion() * item.quantity)
-                          for item in cart_items])
+        cart_items = CartItem.objects.filter(cart=self)
+        total_price = 0
+        for item in cart_items:
+            total_price += item.product.price * item.quantity
         return total_price
 
     def check_if_items_available(self) -> bool:
