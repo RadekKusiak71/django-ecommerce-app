@@ -28,16 +28,22 @@ class Cart(models.Model):
                 return False
         return True
 
-    def convert_items_into_order_items(self, order: Order):
-        if not self.check_if_items_available():
-            return
+    def adjust_cart_items(self) -> None:
         for cart_item in list(CartItem.objects.filter(cart=self)):
+            cart_item.adjust_quantity()
+
+    def convert_items_into_order_items(self, order: Order) -> None:
+        for cart_item in list(CartItem.objects.filter(cart=self)):
+            product = cart_item.product
+
             OrderItem.objects.create(
                 order=order,
                 size=cart_item.size,
                 quantity=cart_item.quantity,
-                product=cart_item.product
+                product=product
             )
+            product.sizes.take_quantity(cart_item.quantity, cart_item.size)
+        self.delete()
 
 
 class AnonymousCart(Cart):

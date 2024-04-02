@@ -9,7 +9,7 @@ from decimal import Decimal
 class HomePageView(generic.ListView):
     template_name = "home.html"
     paginate_by = 6
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by('price')
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)

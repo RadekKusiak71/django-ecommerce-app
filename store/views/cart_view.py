@@ -13,7 +13,7 @@ class CartView(generic.ListView):
     template_name = 'cart.html'
     model = Cart
 
-    def get_object(self) -> Cart:
+    def get_object(self) -> (AuthenticatedCart | AnonymousCart):
         if self.request.user.is_authenticated:
             return AuthenticatedCart.objects.get_or_create(customer=self.request.user)[0]
         return AnonymousCart.objects.get_or_create(

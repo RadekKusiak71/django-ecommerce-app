@@ -13,6 +13,16 @@ class Shipping(models.Model):
         return f"Shipping {self.id}"
 
 
+class OrderData(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f'{self.first_name} - {self.last_name}'
+
+
 class Order(models.Model):
     STATUS_CHOICES = {
         "delivered": "delivered",
@@ -22,6 +32,7 @@ class Order(models.Model):
 
     customer = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True)
+    order_data = models.ForeignKey(OrderData, on_delete=models.CASCADE)
     shipping = models.ForeignKey(Shipping, on_delete=models.CASCADE)
     total = models.DecimalField(max_digits=12, decimal_places=2)
     status = models.CharField(

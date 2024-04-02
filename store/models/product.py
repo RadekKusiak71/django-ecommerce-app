@@ -32,6 +32,11 @@ class Sizes(models.Model):
             "xl": self.xl,
         }
 
+    def take_quantity(self, quantity: int, size: str) -> None:
+        current_quantity = self.get_size_quantity(size)
+        setattr(self, size.lower(), current_quantity-quantity)
+        self.save()
+
 
 class Promotion(models.Model):
     amount = models.SmallIntegerField()
