@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import HomePageView, OrderView, RegisterCreateView, CartItemAdd, CartItemDelete, LoginView, LogoutView, ProductView, CartView
 
+
 urlpatterns = [
     path('', HomePageView.as_view(), name='home-page'),
     path('product/<int:pk>/', ProductView.as_view(), name='product-page'),

@@ -2,7 +2,7 @@ from typing import Any
 from django.http import HttpResponse
 from django.views import generic
 from store.forms import OrderForm
-from store.models import AnonymousCart, AuthenticatedCart, Cart, CartItem
+from store.models import AnonymousCart, AuthenticatedCart, Cart, CartItem, Payment
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -42,6 +42,7 @@ class OrderView(generic.FormView):
             return redirect('order-page')
         order = form.save()
         cart.convert_items_into_order_items(order)
+        Payment.objects.create(order=order, total=order.total)
         return super().form_valid(form)
 
     def get_form_kwargs(self) -> dict[str, Any]:
