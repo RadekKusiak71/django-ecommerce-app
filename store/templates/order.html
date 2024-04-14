@@ -21,6 +21,7 @@
         <button type="submit" class="btn btn-outline-dark mt-2 w-100">Go to payment</button>
     </form>
     <div class="mt-2">
+        {% if total_price > 0 %}
         <h3>Total price: {{total_price}}$</h3>
         <h5>Items:</h5>
         <ul class="list-group list-group-flush">
@@ -37,6 +38,13 @@
             </li>
             {% endfor %}
         </ul>
+        {% else %}
+        <div class="alert alert-primary" role="alert">
+            You cant create order with empty cart. <a href="{% url 'home-page' %}" class="alert-link">Products</a>.
+            Click to checkout
+            products.
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

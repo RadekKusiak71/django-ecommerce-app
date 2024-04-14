@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Your orders {% endblock %}
+
+{% block content %}
+
+<style>
+    .link-offset-1 {
+        cursor: pointer;
+    }
+</style>
+<h2>Your orders</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Order Data</th>
+            <th scope="col">Shipping data</th>
+            <th scope="col">Total ($)</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in order_list %}
+        <tr>
+            <th scope="row">
+                {{order.id}}
+            </th>
+            <td>
+                <a class="link-offset-1">
+                    {{order.order_data.first_name}}-
+                    {{order.order_data.last_name}}-
+                    {{order.order_data.email}}-
+                    {{order.order_data.phone_number}}
+                </a>
+            </td>
+            <td>
+                <a class="link-offset-1">
+                    {{order.shipping.street1}}-
+                    {{order.shipping.street2}}-
+                    {{order.shipping.country}}-
+                    {{order.shipping.zip_code}}
+                </a>
+            </td>
+            <td>
+                {{order.total}}$
+            </td>
+            <td>
+                {{order.status}}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
